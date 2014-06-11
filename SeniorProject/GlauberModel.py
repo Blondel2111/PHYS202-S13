@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 from datetime import date
 from urllib2 import urlopen
 from scipy.optimize import curve_fit
-from scipy.special import j0
 import time
 
 #Importing data from particle data group
@@ -166,7 +165,7 @@ def NCD(Nucleus,Model,Range=2,Bins=100):
         print "Warning: Model not yet supported\nPlease use a different model."
         return None
     elif Model=='FB':
-        #print "Warning: Fourier-Bessel Model currently contains support for He-3 only. If not simulating He-3 collisions, please choose another model."
+        #print "Warning: Fourier-Bessel Model currently contains support for H-3, He-3, C-12, and O-16 only. If not these ions, please choose another model."
         for FBindex in range(len(FBnucleus)):
             if FBnucleus[FBindex]==Nucleus:
                 iFB=FBindex
@@ -174,7 +173,7 @@ def NCD(Nucleus,Model,Range=2,Bins=100):
         p=np.zeros(np.size(r),float)
         v=np.arange(0,17,1)
         for i in range(len(r)):
-            p[i]=abs(sum(FBa[iFB-1,v]*j0((v+1)*np.pi*r[i]/float(FBR[iFB]))))
+            p[i]=abs(sum(FBa[iFB-1,v]*np.sinc((v+1)*r[i]/float(FBR[iFB]))))
         return p
     elif Model=='SOG':
         print "Warning: Model not yet supported\nPlease use a different model."
